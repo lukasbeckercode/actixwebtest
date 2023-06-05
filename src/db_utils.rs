@@ -1,9 +1,10 @@
 use std::env;
-use diesel::{Connection, PgConnection, QueryDsl, RunQueryDsl, SelectableHelper};
+use diesel::{Connection, ExpressionMethods, PgConnection, QueryDsl, RunQueryDsl, SelectableHelper};
 use diesel::associations::HasTable;
 use dotenvy::dotenv;
 use crate::part::Part;
 use crate::schema::parts::dsl::parts;
+use crate::schema::parts::id;
 
 pub fn create_connection() -> PgConnection{
     dotenv().ok();
@@ -35,3 +36,10 @@ pub fn add_part_to_db(new_part:&Part){
 }
 
 
+pub fn delete_part_from_db(remove_part:&Part){
+    let connection = &mut create_connection();
+    diesel::delete(parts::table())
+        .filter(id.eq(remove_part.id))
+        .execute(connection)
+        .expect("Part could not be deleted!");
+}
