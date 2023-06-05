@@ -1,7 +1,9 @@
-pub mod part {
+ use serde::Deserialize;
+ use diesel::prelude::*;
 
-    use diesel::prelude::*;
-    #[derive(Queryable,Selectable,Insertable)]
+
+
+    #[derive(Queryable,Selectable,Insertable,Deserialize)]
     #[diesel(table_name=crate::schema::parts)]
     #[diesel(check_for_backend(diesel::pg::Pg))]
     pub struct Part{
@@ -16,4 +18,3 @@ pub mod part {
         let new_part_2: Part = Part{ id: 2, description: String::from("Test2"), num_actual: 8, num_expected: 8 };
         return [new_part_1,new_part_2]
     }
-}

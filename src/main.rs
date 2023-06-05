@@ -5,7 +5,8 @@ pub mod db_utils;
 use std::fs;
 use actix_web::{App, get, HttpResponse, HttpServer, main, post, Responder, web};
 use actix_web::error::ErrorNotFound;
-use crate::part::part::Part;
+use crate::db_utils::add_part_to_db;
+use crate::part::Part;
 
 #[derive(Debug)]
 struct PartNotFoundErr{
@@ -40,6 +41,11 @@ async fn echo(req_body:String) -> impl Responder{
     HttpResponse::Ok().body(req_body)
 }
 
+#[post("/add_part")]
+async fn add_part(part_data: web::Json<Part>)->actix_web::Result<String>{
+    add_part_to_db(&part_data.0);
+    Ok(format!("Part with id {} added successfully!",part_data.id))
+}
 
 
 
@@ -63,6 +69,7 @@ async fn main() -> std::io::Result<()>{
             .service(hello)
             .service(echo)
             .service(get_part)
+            .service(add_part)
     }).bind(("127.0.0.1",7878))?
         .run()
         .await
