@@ -1,10 +1,14 @@
 pub mod part {
 
+    use diesel::prelude::*;
+    #[derive(Queryable,Selectable,Insertable)]
+    #[diesel(table_name=crate::schema::parts)]
+    #[diesel(check_for_backend(diesel::pg::Pg))]
     pub struct Part{
-        pub(crate) id:u16,
+        pub(crate) id:i32,
         pub(crate) description:String,
-        pub(crate) num_actual:u8,
-        pub(crate) num_expected:u8
+        pub(crate) num_actual:i32,
+        pub(crate) num_expected:i32
     }
 
     pub fn get_example_parts() ->[Part;2]{
