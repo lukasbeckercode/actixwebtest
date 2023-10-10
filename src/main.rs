@@ -86,3 +86,19 @@ async fn main() -> std::io::Result<()>{
         .run()
         .await
 }
+
+//UNIT TESTS
+#[cfg(test)]
+mod tests{
+
+    #[test]
+    fn example_test(){
+        let mut test_var = 0;
+
+        assert_eq!(test_var,0);
+
+        test_var = 4+4;
+        assert_eq!(test_var,8);
+    }
+
+}
