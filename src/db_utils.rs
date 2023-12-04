@@ -1,4 +1,3 @@
-use std::env;
 use diesel::{Connection, ExpressionMethods, PgConnection, QueryDsl, RunQueryDsl, SelectableHelper};
 use diesel::associations::HasTable;
 use dotenvy::dotenv;
@@ -8,8 +7,8 @@ use crate::schema::parts::id;
 
 pub fn create_connection() -> PgConnection{
     dotenv().ok();
-    let db_url = env::var("DATABASE_URL").expect("DATABASE_URL must be set!");
-    PgConnection::establish(&db_url).unwrap_or_else(|_| panic!("Connection failed!"))
+    let db_url = "postgres://postgres:1234@db:5432/inventory";
+    PgConnection::establish(&db_url).unwrap_or_else(|err| panic!("Database Connection Error: {}",err.to_string()))
 
 }
 
