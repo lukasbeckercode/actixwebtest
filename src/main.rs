@@ -60,12 +60,13 @@ async fn add_part(part_data: web::Json<Part>)->actix_web::Result<String>{
     Ok(format!("Part with id {} added successfully!",part_data.id))
 }
 
-///Checks if a requested part exists
+/// fetches all parts and checks if a requested part exists
 fn check_part_exists(part_id:i32) -> Result<Part,PartNotFoundErr> {
     let parts_fetched = db_utils::get_parts_from_db();
     check_part_exists_filter(part_id,parts_fetched)
 }
 
+/// trys to find the requested part in the list of existing parts 
 fn check_part_exists_filter(part_id:i32,parts_fetched:Vec<Part>) -> Result<Part,PartNotFoundErr>{
 
     for p in parts_fetched{
@@ -77,6 +78,7 @@ fn check_part_exists_filter(part_id:i32,parts_fetched:Vec<Part>) -> Result<Part,
     Err(PartNotFoundErr{name:"Part not found!"})
 }
 
+///Main function: handles http binding 
 #[main]
 async fn main() -> std::io::Result<()>{
     HttpServer::new(||{
@@ -90,14 +92,15 @@ async fn main() -> std::io::Result<()>{
         .await
 }
 
-//UNIT TESTS
-//TODO: Define tests
+///UNIT TESTS
+/// Make sure the postgres-container in running 
+/// For local testing, use run_db.sh to setup the test environment and stop_db.sh for teardown 
 #[cfg(test)]
 mod tests{
     use diesel::{Connection, PgConnection};
     use dotenvy::dotenv;
     use crate::check_part_exists_filter;
-    use crate::db_utils::{add_part_to_db_connection, get_parts_from_db_connection};
+    use crate::db_utils::{add_part_to_db_connection, delete_part_from_db_connection, get_parts_from_db_connection};
     use crate::part::Part;
 
     fn setup() -> PgConnection {
@@ -147,5 +150,19 @@ mod tests{
         let new_part = Part { id: 5, description: "Part added by TC".parse().unwrap(), num_actual: 9, num_expected: 9 };
         add_part_to_db_connection(connection,&new_part);
     }
+
+    #[test]
+    fn test_delete_part_from_db_gc(){
+        let connection = &mut setup();
+        let parts_fetched = get_parts_from_db_connection(connection);
+        let result = check_part_exists_filter(1,parts_fetched);
+
+        assert_eq!(result.is_err(),false);
+
+        let result_unwraped = result.unwrap();
+
+        delete_part_from_db_connection(connection,&result_unwraped)
+    }
+
 
 }
