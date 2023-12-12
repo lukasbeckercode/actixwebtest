@@ -94,9 +94,10 @@ async fn main() -> std::io::Result<()>{
 
 ///UNIT TESTS
 /// Make sure the postgres-container in running 
-/// For local testing, use run_db.sh to setup the test environment and stop_db.sh for teardown 
+/// For local testing, use run_db_secret.sh to setup the test environment and stop_db.sh for teardown
 #[cfg(test)]
 mod tests{
+    use std::env;
     use diesel::{Connection, PgConnection};
     use dotenvy::dotenv;
     use crate::check_part_exists_filter;
@@ -105,7 +106,10 @@ mod tests{
 
     fn setup() -> PgConnection {
         dotenv().ok();
-        let db_url = "postgres://postgres:1234@127.0.0.1:5432/inventory";
+
+        let secret_user = env::var("SECRET_USER").expect("SECRET_USER not found in .env");
+        let secret_pass = env::var("SECRET_PASS").expect("SECRET_PASS not found in .env");
+        let db_url= format!("postgres://{}:{}@127.0.0.1:5432/inventory", secret_user,secret_pass);
         PgConnection::establish(&db_url).unwrap_or_else(|err| panic!("Database Connection Error: {}",err.to_string()))
     }
     #[test]

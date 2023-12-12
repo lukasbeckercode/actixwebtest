@@ -1,3 +1,4 @@
+use std::env;
 use diesel::{Connection, ExpressionMethods, PgConnection, QueryDsl, RunQueryDsl, SelectableHelper};
 use diesel::associations::HasTable;
 use dotenvy::dotenv;
@@ -8,7 +9,10 @@ use crate::schema::parts::id;
 /// Creates a connection to the database within docker compose 
 pub fn create_connection() -> PgConnection{
     dotenv().ok();
-    let db_url = "postgres://postgres:1234@db:5432/inventory";
+    let secret_user = env::var("SECRET_USER").expect("SECRET_USER not found in .env");
+    let secret_pass = env::var("SECRET_PASS").expect("SECRET_PASS not found in .env");
+    let db_url= format!("postgres://{}:{}@db:5432/inventory", secret_user,secret_pass);
+
     PgConnection::establish(&db_url).unwrap_or_else(|err| panic!("Database Connection Error: {}",err.to_string()))
 
 }

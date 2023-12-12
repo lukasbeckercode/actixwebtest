@@ -5,10 +5,16 @@ services:
       build:
         context: .
         dockerfile: Dockerfile.db
+        args:
+          - SecretUser=${SECRET_USER}
+          - SecretPass=${SECRET_PASS}
+      env_file:
+        - .env
       ports:
         - "5432:5432"
       volumes:
         - postgres_data:/var/lib/postgresql/data
+
     backend:
       image: api:latest
       build:
@@ -17,3 +23,5 @@ services:
       ports:
         - "7878:7878"
 
+volumes:
+    postgres_data:

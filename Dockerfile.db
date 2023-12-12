@@ -1,9 +1,13 @@
 # Use the official PostgreSQL image
 FROM postgres
+ARG SecretUser
+ARG SecretPass
 
 # Set environment variables for PostgreSQL
-ENV POSTGRES_USER=postgres
-ENV POSTGRES_PASSWORD=1234
+ENV SECRET_USER_VAR=$SecretUser
+ENV SECRET_PASS_VAR=$SecretPass
+ENV POSTGRES_USER=$SECRET_USER_VAR
+ENV POSTGRES_PASSWORD=$SECRET_PASS_VAR
 ENV POSTGRES_DB=inventory
 
 # Expose the PostgreSQL port

@@ -2,3 +2,5 @@
 /Cargo.lock
 /tarpaulin-report.html
 /test-result.txt
+/secrets/
+/.env
