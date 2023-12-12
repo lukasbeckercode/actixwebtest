@@ -39,6 +39,10 @@ jobs:
         with: 
           name: test-results 
           path: ./test-result.txt
+          
+      - name: reset test database 
+        run: diesel database reset 
+        
       - name: Install tarpaulin
         run: cargo install cargo-tarpaulin
 
@@ -50,3 +54,5 @@ jobs:
         with:
           name: test-coverage-report
           path: ./tarpaulin-report.html
+      - name: reset test database
+        run: diesel database reset
