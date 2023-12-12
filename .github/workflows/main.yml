@@ -15,16 +15,33 @@ jobs:
     steps:
       - name: checkout code 
         uses: actions/checkout@v4
+        
       - name: setup docker 
         uses: docker/setup-buildx-action@v3
+        
       - name: setup rust
         uses: actions-rs/toolchain@v1
         with: 
           toolchain: stable
+          
       - run: cargo install diesel_cli  
+      
       - name: Build and run Docker container
         run: |
          chmod +x run_db.sh
          ./run_db.sh
+         
       - name: run unit tests 
         run: cargo test
+        
+      - name: Install tarpaulin
+        run: cargo install cargo-tarpaulin
+
+      - name: Run tests and generate HTML report
+        run: cargo tarpaulin --out Html
+
+      - name: Archive HTML report as artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: test-report
+          path: target/cov-report
