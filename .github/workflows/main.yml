@@ -43,5 +43,5 @@ jobs:
       - name: Archive HTML report as artifact
         uses: actions/upload-artifact@v2
         with:
-          name: test-report
-          path: target/cov-report
+          name: test-coverage-report
+          path: tarpaulin-report.html
