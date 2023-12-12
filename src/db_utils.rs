@@ -15,6 +15,10 @@ pub fn create_connection() -> PgConnection{
 
 pub fn get_parts_from_db() -> Vec<Part> {
     let connection= &mut create_connection();
+    get_parts_from_db_connection(connection)
+}
+
+pub fn get_parts_from_db_connection(connection: &mut PgConnection )->Vec<Part>{
 
     let result = parts
         .limit(5)

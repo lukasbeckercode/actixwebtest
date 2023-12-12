@@ -63,6 +63,10 @@ async fn add_part(part_data: web::Json<Part>)->actix_web::Result<String>{
 ///Checks if a requested part exists
 fn check_part_exists(part_id:i32) -> Result<Part,PartNotFoundErr> {
     let parts_fetched = db_utils::get_parts_from_db();
+    check_part_exists_filter(part_id,parts_fetched)
+}
+
+fn check_part_exists_filter(part_id:i32,parts_fetched:Vec<Part>) -> Result<Part,PartNotFoundErr>{
 
     for p in parts_fetched{
         if p.id == part_id{
@@ -70,8 +74,7 @@ fn check_part_exists(part_id:i32) -> Result<Part,PartNotFoundErr> {
         }
     }
 
-  Err(PartNotFoundErr{name:"Part not found!"})
-
+    Err(PartNotFoundErr{name:"Part not found!"})
 }
 
 #[main]
@@ -91,7 +94,16 @@ async fn main() -> std::io::Result<()>{
 //TODO: Define tests
 #[cfg(test)]
 mod tests{
+    use diesel::{Connection, PgConnection};
+    use dotenvy::dotenv;
+    use crate::{check_part_exists, check_part_exists_filter};
+    use crate::db_utils::get_parts_from_db_connection;
 
+    fn setup() -> PgConnection {
+        dotenv().ok();
+        let db_url = "postgres://postgres:1234@127.0.0.1:5432/inventory";
+        PgConnection::establish(&db_url).unwrap_or_else(|err| panic!("Database Connection Error: {}",err.to_string()))
+    }
     #[test]
     fn example_test(){
         let mut test_var = 0;
@@ -100,6 +112,24 @@ mod tests{
 
         test_var = 4+4;
         assert_eq!(test_var,8);
+    }
+
+    #[test]
+    fn test_get_part_by_id(){
+        let  connection = &mut setup();
+        let parts_fetched = get_parts_from_db_connection(connection);
+        let result = check_part_exists_filter(0,parts_fetched);
+
+        assert_eq!(result.is_err(),false);
+
+        let result_unwraped = result.unwrap();
+        let description = result_unwraped.description;
+        let num_exp = result_unwraped.num_expected;
+        let num_actual = result_unwraped.num_actual;
+
+        assert_eq!(description,"Test 1");
+        assert_eq!(num_exp,12);
+        assert_eq!(num_actual,12);
     }
 
 }
