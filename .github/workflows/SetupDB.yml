@@ -1,0 +1,9 @@
+name: SetupDB 
+
+on: workflow_dispatch 
+
+jobs:
+  update: 
+    runs-on: ubuntu-latest
+    steps: 
+      - run: diesel setup
