@@ -15,7 +15,11 @@ jobs:
     steps:
       - name: checkout code 
         uses: actions/checkout@v4
-        
+      - name: setup environment
+        run: |
+          chmod +x create_env.sh
+          ./create_env.sh ${{secrets.USER}} ${{secrets.PASS}}
+          
       - name: setup docker 
         uses: docker/setup-buildx-action@v3
         
@@ -29,7 +33,7 @@ jobs:
       - name: Build and run Docker container
         run: |
          chmod +x run_db.sh
-         ./run_db.sh
+         ./run_db.sh ${{secrets.USER}} ${{secrets.PASS}}
          
       - name: run unit tests 
         run: cargo test > test-result.txt
