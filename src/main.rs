@@ -96,7 +96,7 @@ async fn main() -> std::io::Result<()>{
 mod tests{
     use diesel::{Connection, PgConnection};
     use dotenvy::dotenv;
-    use crate::{check_part_exists, check_part_exists_filter};
+    use crate::check_part_exists_filter;
     use crate::db_utils::get_parts_from_db_connection;
 
     fn setup() -> PgConnection {
