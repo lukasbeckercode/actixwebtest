@@ -97,7 +97,8 @@ mod tests{
     use diesel::{Connection, PgConnection};
     use dotenvy::dotenv;
     use crate::check_part_exists_filter;
-    use crate::db_utils::get_parts_from_db_connection;
+    use crate::db_utils::{add_part_to_db_connection, get_parts_from_db_connection};
+    use crate::part::Part;
 
     fn setup() -> PgConnection {
         dotenv().ok();
@@ -115,7 +116,7 @@ mod tests{
     }
 
     #[test]
-    fn test_get_part_by_id(){
+    fn test_get_part_by_id_gc(){
         let  connection = &mut setup();
         let parts_fetched = get_parts_from_db_connection(connection);
         let result = check_part_exists_filter(0,parts_fetched);
@@ -130,6 +131,21 @@ mod tests{
         assert_eq!(description,"Test 1");
         assert_eq!(num_exp,12);
         assert_eq!(num_actual,12);
+    }
+
+    #[test]
+    fn test_get_part_by_id_bc(){
+        let connection = &mut setup();
+        let parts_fetched = get_parts_from_db_connection(connection);
+        let result = check_part_exists_filter(99,parts_fetched);
+        assert_eq!(result.is_err(),true);
+    }
+
+    #[test]
+    fn test_add_new_part_gc(){
+        let connection = &mut setup();
+        let new_part = Part { id: 5, description: "Part added by TC".parse().unwrap(), num_actual: 9, num_expected: 9 };
+        add_part_to_db_connection(connection,&new_part);
     }
 
 }

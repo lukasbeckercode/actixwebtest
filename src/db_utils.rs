@@ -31,6 +31,10 @@ pub fn get_parts_from_db_connection(connection: &mut PgConnection )->Vec<Part>{
 
 pub fn add_part_to_db(new_part:&Part){
     let connection = &mut create_connection();
+    add_part_to_db_connection(connection,new_part); 
+}
+
+pub fn add_part_to_db_connection(connection: &mut PgConnection, new_part: &Part){
     diesel::insert_into(parts::table())
         .values(new_part)
         .returning(Part::as_returning())
