@@ -38,7 +38,7 @@ jobs:
         uses: actions/upload-artifact@v2
         with: 
           name: test-results 
-          path: $GITHUB_WORKSPACE/test-results.txt
+          path: ./test-result.txt
       - name: Install tarpaulin
         run: cargo install cargo-tarpaulin
 
@@ -49,4 +49,4 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: test-coverage-report
-          path: $GITHUB_WORKSPACE/tarpaulin-report.html
+          path: ./tarpaulin-report.html
