@@ -2,8 +2,8 @@
 
 ### Einführung und Grundlagen
 - [X] Verständnis von Continuous Delivery und dessen Bedeutung
-- [ ] Unterschiede zwischen Continuous Integration, Continuous Delivery und Continuous Deployment
-- [ ] CI-Anti Pattern identifizieren
+- [X] Unterschiede zwischen Continuous Integration, Continuous Delivery und Continuous Deployment
+- [X] CI-Anti Pattern identifizieren
 
 ### Automatisierung
 - [X] Automatisierte Builds eingerichtet
