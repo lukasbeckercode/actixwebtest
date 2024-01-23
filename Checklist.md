@@ -16,7 +16,7 @@
 - [ ] End-to-End Tests eingerichtet (optional)
 
 ### Deployment-Strategien
-- [ ] Deployment-Strategien identifizieren
+- [X] Deployment-Strategien identifizieren
 - [ ] Rollback-Strategien (optional)
 
 ### Containerisierung
@@ -28,7 +28,7 @@
 - [X] Verwendung in einer Build-Pipeline
 
 ### Feedback-Schleifen & Benachrichtigungen
-- [ ] Feedback von Stakeholdern eingeholt und implementiert
+- [ ] Feedback von Stakeholdern eingeholt und implementiert: N/A
 - [X] Developer Benachrichtigungen
 
 ### Sicherheit
@@ -39,5 +39,5 @@
 - [ ] Datenbank-Backups und Recovery-Pläne
 
 ### Abschluss und Dokumentation
-- [ ] Projekt-Dokumentation vervollständigt
+- [X] Projekt-Dokumentation vervollständigt
 
